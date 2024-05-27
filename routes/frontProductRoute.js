@@ -30,7 +30,7 @@ router.put('/addAdvProduct', upload.array('images', 4), async (req, res) => {
             charging,
             battery,
             displayType, } = req.body;
-            const id = "6651956b7de08851cce262f6"
+            const id = "6654af193dfb078d9112963f"
         const imagePaths = req.files.map(file => file.path);
         console.log(id)
         const newProduct = await FrontProduct.findByIdAndUpdate(id,{
