@@ -11,19 +11,18 @@ const orderRouter = require("./routes/orderRoute");
 const frontProductRouter = require("./routes/frontProductRoute");
 const bodyParser = require("body-parser");
 
+const path = require("path");
 dotenv.config();
 app.use(express.static("public"));
 app.use(express.json());
-app.use(morgan("dev")); 
+app.use(morgan("dev"));
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use("/uploads", express.static("uploads"));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 const connectDB = async () => {
   try {
-    const con = await mongoose.connect(
-      process.env.MONGO_URL
-    );
+    const con = await mongoose.connect(process.env.MONGO_URL);
     console.log("Connected Successfully");
   } catch (error) {
     console.log(error);
