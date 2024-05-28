@@ -2,16 +2,28 @@ const express = require("express")
 const multer = require("multer");
 const { FrontProduct, SingleProduct } = require("../model/frontProduct");
 const router = express.Router()
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/')
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname)
-    }
+
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'uploads',
+        format: async (req, file) => 'png', // or any other supported format
+        public_id: (req, file) => Date.now() + '-' + file.originalname,
+    },
+});
+
+
 const upload = multer({ storage: storage });
+
 
 
 router.put('/addAdvProduct', upload.array('images', 4), async (req, res) => {
